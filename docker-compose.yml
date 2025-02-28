@@ -76,9 +76,6 @@ services:
       - INIT_S3_AWS_REGION=${INIT_S3_AWS_REGION:-us-east-1}
       - INIT_S3_HOST=${INIT_S3_HOST:-us-east-1}
       - INIT_S3_USE_HTTPS=${INIT_S3_USE_HTTPS:-true}
-    labels:
-      caddy: ${SEAFILE_SERVER_PROTOCOL:-http}://${SEAFILE_SERVER_HOSTNAME:?Variable is not set or empty}
-      caddy.reverse_proxy: "{{upstreams 80}}"
     depends_on:
       db:
         condition: service_healthy
@@ -103,7 +100,6 @@ services:
       - NON_ROOT=${NON_ROOT:-false}
       - SEAHUB_SERVICE_URL=${SEAFILE_SERVER_PROTOCOL:-http}://${SEAFILE_SERVER_HOSTNAME:?Variable is not set or empty}
     labels:
-      caddy: ${SEAFILE_SERVER_PROTOCOL:-http}://${SEAFILE_SERVER_HOSTNAME:?Variable is not set or empty}
       caddy.@ws.0_header: "Connection *Upgrade*"
       caddy.@ws.1_header: "Upgrade websocket"
       caddy.0_reverse_proxy: "@ws {{upstreams 80}}"
