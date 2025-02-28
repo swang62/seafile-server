@@ -100,15 +100,15 @@ services:
       - NON_ROOT=${NON_ROOT:-false}
       - SEAHUB_SERVICE_URL=${SEAFILE_SERVER_PROTOCOL:-http}://${SEAFILE_SERVER_HOSTNAME:?Variable is not set or empty}
     labels:
-      caddy.@ws.0_header: "Connection *Upgrade*"
-      caddy.@ws.1_header: "Upgrade websocket"
-      caddy.0_reverse_proxy: "@ws {{upstreams 80}}"
-      caddy.1_handle_path: "/socket.io/*"
-      caddy.1_handle_path.0_rewrite: "* /socket.io{uri}"
-      caddy.1_handle_path.1_reverse_proxy: "{{upstreams 80}}"
-      caddy.2_handle_path: "/sdoc-server/*"
-      caddy.2_handle_path.0_rewrite: "* {uri}"
-      caddy.2_handle_path.1_reverse_proxy: "{{upstreams 80}}"
+      - caddy.@ws.0_header="Connection *Upgrade*"
+      - caddy.@ws.1_header="Upgrade websocket"
+      - caddy_0.handle_path.0_reverse_proxy="@ws {{upstreams 80}}"
+      - caddy_1.handle_path="/socket.io/*"
+      - caddy_1.handle_path.0_rewrite="* /socket.io{uri}"
+      - caddy_1.handle_path.1_reverse_proxy="{{upstreams 80}}"
+      - caddy_2.handle_path="/sdoc-server/*"
+      - caddy_2.handle_path.0_rewrite="* {uri}"
+      - caddy_2.handle_path.1_reverse_proxy="{{upstreams 80}}"
     depends_on:
       db:
         condition: service_healthy
