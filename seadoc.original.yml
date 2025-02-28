@@ -1,10 +1,9 @@
 services:
-
   seadoc:
-    image: ${SEADOC_IMAGE:-seafileltd/sdoc-server:1.0-latest}
+    image: seafileltd/sdoc-server:1.0-latest
     container_name: seadoc
     volumes:
-      - ${SEADOC_VOLUME:-/opt/seadoc-data/}:/shared
+      - seadoc-data:/shared
     # ports:
     #   - "80:80"
     environment:
