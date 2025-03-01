@@ -6,8 +6,6 @@ services:
       - MYSQL_ROOT_PASSWORD=${INIT_SEAFILE_MYSQL_ROOT_PASSWORD:-}
       - MYSQL_LOG_CONSOLE=true
       - MARIADB_AUTO_UPGRADE=1
-    volumes:
-      - "seafile-mysql:/var/lib/mysql"
     healthcheck:
       test:
         [
@@ -21,6 +19,8 @@ services:
       start_period: 30s
       timeout: 5s
       retries: 10
+    volumes:
+      - "seafile-mysql:/var/lib/mysql"
 
   memcached:
     image: memcached:1.6.29
@@ -66,6 +66,15 @@ services:
         condition: service_healthy
       memcached:
         condition: service_started
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - 'http://localhost/api2/ping/'
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
     volumes:
       - /data/coolify/databases/seafile:/shared
 
