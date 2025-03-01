@@ -26,6 +26,14 @@ services:
     image: memcached:1.6.29
     container_name: seafile-memcached
     entrypoint: memcached -m 256
+    healthcheck:
+      test:
+        - CMD
+        - memcached
+        - --version
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   seafile:
     image: seafileltd/seafile-pro-mc:12.0-latest
@@ -70,7 +78,7 @@ services:
       test:
         - CMD
         - curl
-        - 'http://localhost/api2/ping/'
+        - http://localhost/api2/ping/
       interval: 30s
       timeout: 5s
       retries: 5
