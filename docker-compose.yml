@@ -70,6 +70,8 @@ services:
       start_period: 30s
       timeout: 5s
       retries: 10
+    labels:
+      - 'com.centurylinklabs.watchtower.enable=false'
     volumes:
       - "seafile-mysql:/var/lib/mysql"
 
@@ -77,6 +79,8 @@ services:
     image: memcached:1.6.29
     container_name: seafile-memcached
     entrypoint: memcached -m 256
+    labels:
+      - 'com.centurylinklabs.watchtower.enable=false'
     healthcheck:
       test:
         - CMD
