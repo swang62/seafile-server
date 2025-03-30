@@ -1,7 +1,6 @@
 services:
   seafile:
     image: seafileltd/seafile-pro-mc:12.0-latest
-    container_name: seafile
     environment:
       - DB_HOST=${SEAFILE_MYSQL_DB_HOST:-db}
       - DB_PASSWORD=${SEAFILE_MYSQL_DB_PASSWORD:?Variable is not set or empty}
@@ -48,7 +47,7 @@ services:
       retries: 5
       start_period: 30s
     volumes:
-      - /data/coolify/databases/seafile:/shared
+      - /mnt/volume-1/seafile:/shared
       
   db:
     image: mariadb:10.11
