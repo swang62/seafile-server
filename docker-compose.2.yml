@@ -27,6 +27,8 @@ services:
         condition: service_healthy
       memcached:
         condition: service_started
+      elasticsearch:
+        condition: service_started
     healthcheck:
       test:
         - CMD
@@ -39,24 +41,23 @@ services:
     volumes:
       - /data/seafile:/shared
 
-  seasearch:  
-    image: seafileltd/seasearch:latest
-    environment: 
-      - SS_FIRST_ADMIN_USER=${INIT_SEAFILE_ADMIN_EMAIL}
-      - SS_FIRST_ADMIN_PASSWORD=${INIT_SEAFILE_ADMIN_PASSWORD}
-      - SS_STORAGE_TYPE=${SS_STORAGE_TYPE:-}
-      - SS_MAX_OBJ_CACHE_SIZE=${SS_MAX_OBJ_CACHE_SIZE:-10GB}
-      - SS_LOG_TO_STDOUT=${SS_LOG_TO_STDOUT:-false}
-      - SS_LOG_DIR=${SS_LOG_DIR:-/opt/seasearch/data/log}
-      - SS_LOG_LEVEL=${SS_LOG_LEVEL:-info}
-    depends_on:
-      seafile:
-        condition: service_healthy
+  elasticsearch:
+    image: elasticsearch:8.15.0
+    environment:
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
+      - "xpack.security.enabled=false"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    mem_limit: 4g
     healthcheck:
       test:
         - CMD
         - curl
-        - http://localhost:4080
+        - http://localhost:9200
       interval: 30s
       timeout: 5s
       retries: 5
@@ -64,9 +65,9 @@ services:
     networks:
       default:
         aliases:
-          - seasearch
+          - elasticsearch
     volumes:  
-      - /data/seasearch:/opt/seasearch/data  
+      - /data/seasearch:/usr/share/elasticsearch/data 
 
   db:
     image: mariadb:10.11
