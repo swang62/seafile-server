@@ -26,9 +26,9 @@ services:
       db:
         condition: service_healthy
       memcached:
-        condition: service_started
+        condition: service_healthy
       elasticsearch:
-        condition: service_started
+        condition: service_healthy
     healthcheck:
       test:
         - CMD
@@ -38,6 +38,7 @@ services:
       timeout: 5s
       retries: 5
       start_period: 30s
+    restart: unless-stopped
     volumes:
       - /data/seafile:/shared
 
@@ -58,20 +59,20 @@ services:
         - CMD
         - curl
         - http://localhost:9200
-      interval: 30s
+      interval: 10s
       timeout: 5s
       retries: 5
-      start_period: 30s
+      start_period: 10s
     networks:
       default:
         aliases:
           - elasticsearch
+    restart: unless-stopped
     volumes:  
       - seafile-elasticsearch:/usr/share/elasticsearch
 
   db:
     image: mariadb:10.11
-    container_name: seafile-mysql
     environment:
       - MYSQL_ROOT_PASSWORD=${INIT_SEAFILE_MYSQL_ROOT_PASSWORD:-}
       - MYSQL_LOG_CONSOLE=true
@@ -85,8 +86,8 @@ services:
           "--mariadbupgrade",
           "--innodb_initialized",
         ]
-      interval: 30s
-      start_period: 30s
+      interval: 10s
+      start_period: 10s
       timeout: 5s
       retries: 10
     networks:
@@ -95,12 +96,12 @@ services:
           - db
     labels:
       - 'com.centurylinklabs.watchtower.enable=false'
+    restart: unless-stopped
     volumes:
       - "seafile-mysql:/var/lib/mysql"
 
   memcached:
     image: memcached:1.6.29
-    container_name: seafile-memcached
     entrypoint: memcached -m 256
     networks:
       default:
@@ -108,12 +109,13 @@ services:
           - memcached
     labels:
       - 'com.centurylinklabs.watchtower.enable=false'
+    restart: unless-stopped
     healthcheck:
       test:
         - CMD
         - memcached
         - --version
-      interval: 30s
+      interval: 10s
       timeout: 10s
       retries: 5
 
