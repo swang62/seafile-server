@@ -61,6 +61,8 @@ services:
         --o:remote_font_config.url=${COLLABORA_REMOTE_FONT:-}
         --o:logging.file[@enable]=${COLLABORA_ENABLE_FILE_LOGGING:-false}
         --o:logging.file.property[0]=/opt/cool/logs/coolwsd.log
+    labels:
+      - 'caddy.reverse_proxy={{upstreams 9980}}'
     healthcheck:
       test:
         - CMD
