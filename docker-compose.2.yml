@@ -67,7 +67,7 @@ services:
         aliases:
           - elasticsearch
     volumes:  
-      - /data/seasearch:/usr/share/elasticsearch/data 
+      - seafile-elasticsearch:/usr/share/elasticsearch
 
   db:
     image: mariadb:10.11
@@ -119,3 +119,4 @@ services:
 
 volumes:
   seafile-mysql:
+  seafile-elasticsearch:
