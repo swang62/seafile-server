@@ -67,7 +67,7 @@ services:
       test:
         - CMD
         - curl
-        - http://localhost:6232
+        - http://localhost:9980
       interval: 10s
       timeout: 5s
       retries: 5
