@@ -49,7 +49,7 @@ services:
     cap_add:
       - MKNOD
     environment:
-      - server_name=${SEAFILE_SERVER_HOSTNAME:?Variable is not set or empty}:${COLLABORA_PORT:-9980}
+      - server_name=${COLLABORA_SERVER_HOSTNAME:?Variable is not set or empty}:${COLLABORA_PORT:-9980}
       - username=${COLLABORA_USERNAME:?Variable is not set or empty}
       - password=${COLLABORA_PASSWORD:?Variable is not set or empty}
       - DONT_GEN_SSL_CERT=true
@@ -61,9 +61,6 @@ services:
         --o:remote_font_config.url=${COLLABORA_REMOTE_FONT:-}
         --o:logging.file[@enable]=${COLLABORA_ENABLE_FILE_LOGGING:-false}
         --o:logging.file.property[0]=/opt/cool/logs/coolwsd.log
-    labels:
-      - 'caddy=${SEAFILE_SERVER_HOSTNAME:?Variable is not set or empty}:${COLLABORA_PORT:-9980}'
-      - 'caddy.reverse_proxy={{upstreams 9980}}'
     healthcheck:
       test:
         - CMD
