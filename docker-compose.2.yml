@@ -27,8 +27,8 @@ services:
         condition: service_healthy
       memcached:
         condition: service_healthy
-      elasticsearch:
-        condition: service_healthy
+      # elasticsearch:
+      #   condition: service_healthy
     healthcheck:
       test:
         - CMD
@@ -72,34 +72,34 @@ services:
           - collabora
     restart: unless-stopped
 
-  elasticsearch:
-    image: elasticsearch:8.15.0
-    environment:
-      - discovery.type=single-node
-      - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
-      - "xpack.security.enabled=false"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    mem_limit: 4g
-    healthcheck:
-      test:
-        - CMD
-        - curl
-        - http://localhost:9200
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
-    networks:
-      default:
-        aliases:
-          - elasticsearch
-    restart: unless-stopped
-    volumes:  
-      - seafile-elasticsearch:/usr/share/elasticsearch
+  # elasticsearch:
+  #   image: elasticsearch:8.15.0
+  #   environment:
+  #     - discovery.type=single-node
+  #     - bootstrap.memory_lock=true
+  #     - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
+  #     - "xpack.security.enabled=false"
+  #   ulimits:
+  #     memlock:
+  #       soft: -1
+  #       hard: -1
+  #   mem_limit: 4g
+  #   healthcheck:
+  #     test:
+  #       - CMD
+  #       - curl
+  #       - http://localhost:9200
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #     start_period: 10s
+  #   networks:
+  #     default:
+  #       aliases:
+  #         - elasticsearch
+  #   restart: unless-stopped
+  #   volumes:  
+  #     - seafile-elasticsearch:/usr/share/elasticsearch
 
   db:
     image: mariadb:10.11
@@ -151,4 +151,4 @@ services:
 
 volumes:
   seafile-mysql:
-  seafile-elasticsearch:
+  # seafile-elasticsearch:
