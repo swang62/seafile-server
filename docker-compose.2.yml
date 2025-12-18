@@ -98,7 +98,7 @@ services:
   #       aliases:
   #         - elasticsearch
   #   restart: unless-stopped
-  #   volumes:  
+  #   volumes:
   #     - seafile-elasticsearch:/usr/share/elasticsearch
 
   db:
@@ -124,8 +124,6 @@ services:
       default:
         aliases:
           - db
-    labels:
-      - 'com.centurylinklabs.watchtower.enable=false'
     restart: unless-stopped
     volumes:
       - "seafile-mysql:/var/lib/mysql"
@@ -137,8 +135,6 @@ services:
       default:
         aliases:
           - memcached
-    labels:
-      - 'com.centurylinklabs.watchtower.enable=false'
     restart: unless-stopped
     healthcheck:
       test:
