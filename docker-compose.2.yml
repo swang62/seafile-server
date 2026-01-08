@@ -1,6 +1,7 @@
 services:
   seafile:
     image: seafileltd/seafile-pro-mc:13.0-latest
+    container_name: seafile
     environment:
       - ENABLE_SEADOC=false
       - ENABLE_NOTIFICATION_SERVER=false
@@ -77,6 +78,7 @@ services:
 
   db:
     image: mariadb:10.11
+    container_name: seafile-mysql
     environment:
       - MYSQL_ROOT_PASSWORD=${INIT_SEAFILE_MYSQL_ROOT_PASSWORD:-}
       - MYSQL_LOG_CONSOLE=true
@@ -90,8 +92,8 @@ services:
           "--mariadbupgrade",
           "--innodb_initialized",
         ]
-      interval: 10s
-      start_period: 10s
+      interval: 30s
+      start_period: 30s
       timeout: 5s
       retries: 10
     networks:
@@ -124,4 +126,3 @@ services:
 
 volumes:
   seafile-mysql:
-  # seafile-elasticsearch:
